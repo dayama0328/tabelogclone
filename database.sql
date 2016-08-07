@@ -28,3 +28,28 @@ ALTER TABLE `users`
 
 ALTER TABLE `users`
  MODIFY `id` int(11) not null AUTO_INCREMENT;
+
+CREATE TABLE `reviews` (
+  `id` int(11) not null,
+  `user_id` int(11) not null,
+  `shop_id` int(11) not null,
+  `title` varchar(255) not null,
+  `body` text not null,
+  `score` int(11) not null,
+  `created` datetime not null,
+  `updated` datetime not null
+) ENGINE=InnoDB;
+
+ALTER TABLE `reviews`
+ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `reviews`
+MODIFY `id` int(11) not null AUTO_INCREMENT;
+
+ALTER TABLE `reviews`
+ADD KEY `user_id` (`user_id`),
+ADD KEY `shop_id` (`shop_id`);
+
+ALTER TABLE `reviews`
+ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`),
+ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);

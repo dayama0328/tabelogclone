@@ -31,5 +31,36 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-  public $components = array('DebugKit.Toolbar');
+  public $components = array('DebugKit.Toolbar', 'Auth');
+
+  public $isLogin = false;
+  public $user = array();
+  public $uses = array('User');
+
+  public function beforeFilter() {
+    $this->isLogin = (bool)$this->Auth->user(); //ログインしているか否かを真偽値で格納
+    $user = $this->Auth->user(); //ユーザー情報の取得
+
+    if (!empty($user['email'])) { // emailが空でなければ
+      $user = $this->User->findByEmail($user['email']); // データベースのemailを取得 findBy◯◯でどのカラム名も取得可能
+      $this->user = $user['User'];
+    } else {
+      $this->user = $user;
+    }
+
+    $this->set('isLogin', $this->isLogin);
+    $this->set('user', $this->user);
+    //var_dump($this->user);
+    $this->Auth->allow();
+  }
 }
+
+
+
+
+
+
+
+
+
+
